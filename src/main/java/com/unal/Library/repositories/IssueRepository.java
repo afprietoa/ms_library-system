@@ -9,9 +9,11 @@ import com.unal.Library.structures.DoublyLinkedList;
 import com.unal.Library.structures.DynamicArrayList;
 import com.unal.Library.structures.Queue;
 import com.unal.Library.structures.Stack;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository
 public class IssueRepository implements InterfaceRepository<Issue> {
     Stack<Issue> issues = new Stack<>();
 
