@@ -2,7 +2,7 @@ package com.unal.Library.repositories;
 
 import com.unal.Library.models.User;
 import com.unal.Library.models.common.Role;
-import com.unal.Library.structures.DoublyLinkedList;
+import com.unal.Library.structures.DynamicArrayList;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -15,14 +15,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-
 @Repository
-public class UserListRepository implements InterfaceRepository<User> {
-    DoublyLinkedList<User> users;
+public class UserArrayListRepository implements InterfaceRepository<User> {
+    DynamicArrayList<User> users;
     List<User> userList;
 
-    public UserListRepository(){
-        this.users = new DoublyLinkedList<>();
+    public UserArrayListRepository(){
+        this.users = new DynamicArrayList<>();
         this.userList = new ArrayList<>();
     }
     @Override
@@ -39,39 +38,35 @@ public class UserListRepository implements InterfaceRepository<User> {
 
     @Override
     public Optional<User> findById(int id) {
-        DoublyLinkedList<User>.Node<User> aux = null;
-        for(
-                aux = users.head;
-                (aux!=null) && (!(aux.key.getId()==id));
-                aux=aux.next
-        );
-        if (aux == null){
-            return null;
+        int i = 0;
+        while(i < users.length()) {
+            if(users.find(i).getId() == id) {
+                return Optional.of(users.find(i));
+            }
+            i++;
         }
-        return Optional.of(aux.key);
+        return null;
     }
 
     @Override
     public void save(User newUser) {
-        users.pushBack(newUser);
+        users.popBack();
     }
 
     @Override
     public void edit(User user, User NewUser) {
-        users.search(user).key = NewUser;
+        users.exchange(NewUser, users.getPosition(user));
     }
     public Optional<User> validateLogin(String email, String password){
-        DoublyLinkedList<User>.Node<User> aux = null;
-        for(aux = users.head; (aux!=null); aux=aux.next){
-            if (aux.key.getEmail().equals(email) && aux.key.getPassword().equals(password)){
-                return Optional.of(aux.key);
-            }
-        }
 
-        if (aux == null){
-            return null;
+        int i = 0;
+        while(i < users.length()) {
+            if(users.find(i).getEmail().equals(email) && users.find(i).getPassword().equals(password)) {
+                return Optional.of(users.find(i));
+            }
+            i++;
         }
-        return Optional.of(aux.key);
+        return null;
     }
 
     /**
@@ -97,8 +92,8 @@ public class UserListRepository implements InterfaceRepository<User> {
 
     @Override
     public void delete(int id) {
-        users.erase(users.getPosition(findById(id).get()));
-        //users.delete(findById(id).get());
+        users.delete(findById(id).get());
+
     }
     @PostConstruct
     private void init() {
@@ -111,10 +106,10 @@ public class UserListRepository implements InterfaceRepository<User> {
                 String[] cellValues = tuple.split(",");
                 User user = new User(
                         Integer.parseInt(cellValues[0]),
-                                cellValues[1].concat(" ").concat(cellValues[2]),
-                                cellValues[3],
-                                cellValues[4],
-                                this.convertToSHA256(cellValues[3]),
+                        cellValues[1].concat(" ").concat(cellValues[2]),
+                        cellValues[3],
+                        cellValues[4],
+                        this.convertToSHA256(cellValues[3]),
                         String.valueOf(Arrays.asList(Role.values()).get((int)(Math.floor(Math.random()*Role.values().length))))
                 );
                 users.pushBack(user);

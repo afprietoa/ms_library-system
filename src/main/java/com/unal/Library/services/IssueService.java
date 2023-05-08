@@ -7,7 +7,7 @@ import com.unal.Library.models.User;
 import com.unal.Library.models.common.ItemStatus;
 import com.unal.Library.repositories.BookRepository;
 import com.unal.Library.repositories.IssueRepository;
-import com.unal.Library.repositories.UserListRepository;
+import com.unal.Library.repositories.UserDoublyListRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,11 +20,11 @@ import java.util.Optional;
 public class IssueService {
 
     private IssueRepository issueRepository;
-    private UserListRepository userRepository;
+    private UserDoublyListRepository userRepository;
     private BookRepository bookRepository;
 
 
-    public IssueService(IssueRepository issueRepository, UserListRepository userRepository, BookRepository bookRepository) {
+    public IssueService(IssueRepository issueRepository, UserDoublyListRepository userRepository, BookRepository bookRepository) {
         this.issueRepository = issueRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
