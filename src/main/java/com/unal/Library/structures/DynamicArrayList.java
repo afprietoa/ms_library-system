@@ -109,7 +109,7 @@ public class DynamicArrayList<T> {
         return index;
     }
 
-    public void delete(int key)
+    public void delete(T key)
     {
         // put your code here
 

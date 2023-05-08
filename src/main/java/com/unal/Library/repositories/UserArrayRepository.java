@@ -93,7 +93,7 @@ public class UserArrayRepository implements InterfaceRepository<User> {
 
     @Override
     public void delete(int id) {
-        users.delete(users.getPosition(findById(id).get()));
+        users.delete(findById(id).get());
 
     }
     @PostConstruct
