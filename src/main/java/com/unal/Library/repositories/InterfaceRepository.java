@@ -29,7 +29,7 @@ public interface InterfaceRepository<T> {
      * @param obj
      * @return
      */
-    public void edit(T obj);
+    public void edit(T obj, T newObj);
 
     /**
      *

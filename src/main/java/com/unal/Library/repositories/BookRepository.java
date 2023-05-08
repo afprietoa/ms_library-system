@@ -95,8 +95,8 @@ public class BookRepository implements InterfaceRepository<Book>{
     }
 
     @Override
-    public void edit(Book book) {
-        books.search(book).key = book;
+    public void edit(Book book, Book newBook) {
+        books.search(book).key = newBook;
     }
 
     @Override

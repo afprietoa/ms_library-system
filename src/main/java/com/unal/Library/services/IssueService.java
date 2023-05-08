@@ -103,11 +103,11 @@ public class IssueService {
         if(book.get().getCopies()!=0){
             newIssue.setBook(book.get());
             book.get().setCopies(book.get().getCopies()-1);
-            bookRepository.edit(book.get());
+            bookRepository.edit(book.get(), book.get());
 
         }else{
             book.get().setItemStatus(String.valueOf(ItemStatus.UNAVAILABLE));
-            bookRepository.edit(book.get());
+            bookRepository.edit(book.get(), book.get());
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                     "The book does not available");
         }
@@ -157,7 +157,7 @@ public class IssueService {
             newIssue.setBook(book.get());
 
             book.get().setItemStatus(String.valueOf(ItemStatus.IN_RESERVE));
-            bookRepository.edit(book.get());
+            bookRepository.edit(book.get(), book.get());
 
 
         }else{
@@ -197,7 +197,7 @@ public class IssueService {
                     tempIssue.get().setBorrowDate(issue.getBorrowDate());
                 if (issue.getDueDate() != null)
                     tempIssue.get().setDueDate(issue.getDueDate());
-                this.issueRepository.edit(tempIssue.get());
+                this.issueRepository.edit(tempIssue.get(), tempIssue.get());
                 return tempIssue.get();
             }
             else{

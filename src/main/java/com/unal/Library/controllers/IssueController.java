@@ -25,8 +25,17 @@ public class IssueController {
 
     @GetMapping("/by_id/{id}")
     public Optional<Issue> getBorrowing(@PathVariable("id") int id){
-        return this.issueService.show(id);
+        long startTime = System.nanoTime();
+
+        Optional<Issue> issue = this.issueService.show(id);
+
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Endpoint execution time: " + elapsedTime + "ns");
+
+        return issue;
     }
+
 
     @GetMapping("/reserve/all/book/{idBook}")
     public List<IssueDTO> getBookingHistory(@PathVariable("idBook") String idBook){

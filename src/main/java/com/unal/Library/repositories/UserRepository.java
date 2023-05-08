@@ -44,6 +44,9 @@ public class UserRepository implements InterfaceRepository<User> {
                 (aux!=null) && (!(aux.key.getId()==id));
                 aux=aux.next
         );
+        if (aux == null){
+            return null;
+        }
         return Optional.of(aux.key);
     }
 
@@ -53,16 +56,20 @@ public class UserRepository implements InterfaceRepository<User> {
     }
 
     @Override
-    public void edit(User user) {
-        users.search(user).key = user;
+    public void edit(User user, User NewUser) {
+        users.search(user).key = NewUser;
     }
     public Optional<User> validateLogin(String email, String password){
         DoublyLinkedList<User>.Node<User> aux = null;
-        for(
-                aux = users.head;
-                (aux!=null) && (!(aux.key.getEmail()==email && aux.key.getPassword()==password));
-                aux=aux.next
-        );
+        for(aux = users.head; (aux!=null); aux=aux.next){
+            if (aux.key.getEmail().equals(email) && aux.key.getPassword().equals(password)){
+                return Optional.of(aux.key);
+            }
+        }
+
+        if (aux == null){
+            return null;
+        }
         return Optional.of(aux.key);
     }
 
@@ -89,12 +96,12 @@ public class UserRepository implements InterfaceRepository<User> {
 
     @Override
     public void delete(int id) {
-        //users.erase(users.getPosition(findById(id).get()));
-        users.delete(findById(id).get());
+        users.erase(users.getPosition(findById(id).get()));
+        //users.delete(findById(id).get());
     }
     @PostConstruct
     private void init() {
-        String path="src/main/java/com/unal/Library/data/users.csv";
+        String path="src/main/java/com/unal/Library/data/usuarios10mil.csv";
         String tuple;
 
         try (BufferedReader buffer =

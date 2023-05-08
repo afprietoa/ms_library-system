@@ -106,8 +106,8 @@ public class IssueRepository implements InterfaceRepository<Issue> {
     }
 
     @Override
-    public void edit(Issue issue) {
-        issues.listWithTail.search(issue).key = issue;
+    public void edit(Issue issue, Issue newIssue) {
+        issues.listWithTail.search(issue).key = newIssue;
     }
 
     @Override

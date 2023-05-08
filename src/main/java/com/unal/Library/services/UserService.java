@@ -46,9 +46,10 @@ public class UserService {
     public User create(User newUser){
         if(newUser.getId() != null){
             Optional<User> tempUser = this. userRepository.findById(newUser.getId());
-            if(tempUser.isPresent())
+            if(tempUser != null && tempUser.isPresent()){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "ID is yet in the database.");
+            }
         }
         if((newUser.getEmail() != null) && (newUser.getNickname() != null) &&
                 (newUser.getPassword() != null)){
@@ -70,10 +71,11 @@ public class UserService {
             Optional<User> tempUser = this.userRepository.findById(id);
             if(tempUser.isPresent()){
                 if(user.getNickname() != null)
-                    tempUser.get().setNickname(user.getNickname());
+                    //tempUser.get().setNickname(user.getNickname());
                 if (user.getPassword() != null)
-                    tempUser.get().setPassword(userRepository.convertToSHA256(user.getPassword()));
-                this.userRepository.edit(tempUser.get());
+                    user.setPassword(userRepository.convertToSHA256(user.getPassword()));
+                System.out.println(user.getId());
+                this.userRepository.edit(tempUser.get(), user);
                 return tempUser.get();
             }
             else{
@@ -107,11 +109,13 @@ public class UserService {
             String email = user.getEmail();
             String password = userRepository.convertToSHA256(user.getPassword());
             Optional<User> tempUser = userRepository.validateLogin(email, password);
-            if(tempUser.isEmpty())
+            if(tempUser == null){
+                System.out.println(user.getId());
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                         "Invalid login.");
-            else
+            }else {
                 result = tempUser.get();
+            }
         }
         else
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

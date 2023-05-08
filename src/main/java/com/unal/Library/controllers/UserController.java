@@ -17,35 +17,78 @@ public class UserController {
 
     @GetMapping("/all")
     public List<User> getAllUsers(){
-        return this.userService.index();
+
+        long startTime = System.nanoTime();
+        List<User> user = this.userService.index();
+
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Endpoint execution time: " + elapsedTime + "ns");
+        return user;
     }
+
 
     @GetMapping("/by_id/{id}")
     public Optional<User> getUserById(@PathVariable("id") int id){
-        return this.userService.show(id);
+        long startTime = System.nanoTime();
+
+        Optional<User> user = this.userService.show(id);
+
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Endpoint execution time: " + elapsedTime + "ns");
+        return user;
     }
 
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
     public User insertUser(@RequestBody User user){
-        return this.userService.create(user);
+
+        long startTime = System.nanoTime();
+        User u =  this.userService.create(user);
+
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Endpoint execution time: " + elapsedTime + "ns");
+        return u;
     }
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public User loginUser(@RequestBody User user){
-        return this.userService.login(user);
+
+        long startTime = System.nanoTime();
+
+        User u = this.userService.login(user);
+
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Endpoint execution time: " + elapsedTime + "ns");
+        return u;
     }
 
     @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public User updateUser(@PathVariable("id") int id, @RequestBody User user){
-        return this.userService.update(id, user);
+
+        long startTime = System.nanoTime();
+        User u = this.userService.update(id, user);
+
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Endpoint execution time: " + elapsedTime + "ns");
+        return u;
     }
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteUser(@PathVariable("id") int id){
-        return this.userService.delete(id);
+
+        long startTime = System.nanoTime();
+        Boolean bool = this.userService.delete(id);
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        System.out.println("Endpoint execution time: " + elapsedTime + "ns");
+        return bool;
     }
 }
