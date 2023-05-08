@@ -95,4 +95,43 @@ public class DynamicArrayList<T> {
     public T find(int idx){
         return list[idx];
     }
+
+    public int getPosition(T obj){
+        int index = -1;
+        int i = 0;
+        while(i < this.length()) {
+            if(this.list[i].equals(obj)) {
+                index = i;
+                break;
+            }
+            i++;
+        }
+        return index;
+    }
+
+    public void delete(int key)
+    {
+        // put your code here
+
+        T reList[] = (T[]) new Object[capacity];
+        for(int i=0; i<size; i++){
+            if(list[i].equals(key)){
+                for(int k=i; k<size-1; k++){
+
+                    reList[k] = list[k+1];
+
+                }
+                list = reList;
+                break;
+            }
+            else{
+                reList[i] = list[i];
+            }
+        }
+        list = reList;
+    }
+
+    public void exchange(T user, int idx) {
+        list[idx] = user;
+    }
 }

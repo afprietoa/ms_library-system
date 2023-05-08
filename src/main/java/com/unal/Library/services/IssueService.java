@@ -7,7 +7,7 @@ import com.unal.Library.models.User;
 import com.unal.Library.models.common.ItemStatus;
 import com.unal.Library.repositories.BookRepository;
 import com.unal.Library.repositories.IssueRepository;
-import com.unal.Library.repositories.UserRepository;
+import com.unal.Library.repositories.UserListRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,11 +20,11 @@ import java.util.Optional;
 public class IssueService {
 
     private IssueRepository issueRepository;
-    private UserRepository userRepository;
+    private UserListRepository userRepository;
     private BookRepository bookRepository;
 
 
-    public IssueService(IssueRepository issueRepository, UserRepository userRepository, BookRepository bookRepository) {
+    public IssueService(IssueRepository issueRepository, UserListRepository userRepository, BookRepository bookRepository) {
         this.issueRepository = issueRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
@@ -112,12 +112,12 @@ public class IssueService {
                     "The book does not available");
         }
 
-        if(newIssue.getId() != null){
+/*        if(newIssue.getId() != null){
             Optional<Issue> tempUser = this. issueRepository.findById(newIssue.getId());
             if(tempUser.isPresent())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "ID is yet in the database.");
-        }
+        }*/
         if((newIssue.getUser() != null) && (newIssue.getBook() != null) &&
                 (newIssue.getBorrowDate() != null) && (newIssue.getDueDate() != null) ){
             this.issueRepository.save(newIssue);

@@ -1,7 +1,8 @@
 package com.unal.Library.services;
 
 import com.unal.Library.models.User;
-import com.unal.Library.repositories.UserRepository;
+import com.unal.Library.repositories.UserArrayRepository;
+import com.unal.Library.repositories.UserListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,8 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository userRepository;
+    private UserArrayRepository userRepository;
+    //private UserListRepository userRepository;
     /**
      *
      * @return

@@ -17,11 +17,12 @@ import java.util.Optional;
 
 
 @Repository
-public class UserRepository implements InterfaceRepository<User> {
-    DoublyLinkedList<User> users = new DoublyLinkedList<>();
+public class UserListRepository implements InterfaceRepository<User> {
+    DoublyLinkedList<User> users;
     List<User> userList;
 
-    public UserRepository(){
+    public UserListRepository(){
+        this.users = new DoublyLinkedList<>();
         this.userList = new ArrayList<>();
     }
     @Override

@@ -1,10 +1,11 @@
 package com.unal.Library.controllers;
 
 import com.unal.Library.dto.IssueDTO;
+
+
+import com.unal.Library.dto.IssueDTO;
 import com.unal.Library.models.Issue;
-import com.unal.Library.models.User;
 import com.unal.Library.services.IssueService;
-import com.unal.Library.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class IssueController {
     }
 
     @GetMapping("/reserve/by_id/book/{idBook}/user/{idUser}")
-    public Optional<IssueDTO> getBooking(@PathVariable("idBook") String idBook,@PathVariable("idUser") int idUser ){
+    public Optional<IssueDTO> getBooking(@PathVariable("idBook") String idBook, @PathVariable("idUser") int idUser ){
         return this.issueService.showDTO(idBook, idUser);
     }
 
