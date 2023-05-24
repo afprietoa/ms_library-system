@@ -32,11 +32,15 @@ public class BookRepository implements InterfaceRepository<Book>{
 
         DoublyLinkedList<Book>.Node<Book> aux = null;
 
-        for (aux = (DoublyLinkedList<Book>.Node<Book>) books.head;
-             (aux != null) && (aux.key.getIsbn10().equals(isbn)) && (aux.key.getIsbn13().equals(isbn));
-             aux = aux.next);
+        for (aux = (DoublyLinkedList<Book>.Node<Book>) books.head; (aux != null); aux = aux.next)
+        {
+            if ((aux.key.getIsbn10().equals(isbn)) || (aux.key.getIsbn13().equals(isbn)))
+            {
+                return Optional.of(aux.key);
+            }
+        }
 
-        return Optional.of(aux.key);
+        return null;
 
     }
 
@@ -119,7 +123,7 @@ public class BookRepository implements InterfaceRepository<Book>{
         try(
                 BufferedReader buffer = new BufferedReader(new FileReader(path))){
             while((tuple = buffer.readLine()) != null){
-                String[] cellValues = tuple.split(",");
+                String[] cellValues = tuple.split(",(?=(?:[^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)");
 
                 if (cellValues.length > 9){
                     Book book = new Book(
@@ -143,7 +147,6 @@ public class BookRepository implements InterfaceRepository<Book>{
             System.out.println(e);
         }
 
-        System.out.println(books.length());
     }
 
 

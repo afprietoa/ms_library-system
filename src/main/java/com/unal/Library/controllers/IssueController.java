@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/issue")
+@CrossOrigin(origins = "http://localhost:3000")
 public class IssueController {
     @Autowired
     private IssueService issueService;
