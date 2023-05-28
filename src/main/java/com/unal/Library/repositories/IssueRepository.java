@@ -76,6 +76,22 @@ public class IssueRepository implements InterfaceRepository<Issue> {
         return Optional.of(aux.key);
     }
 
+    public DoublyLinkedList<Issue> findUserIssues(int idUser)
+    {
+        DoublyLinkedList<Issue>.Node<Issue> aux = null;
+        DoublyLinkedList<Issue> userIssues = new DoublyLinkedList<>();
+
+        for( aux = issues.listWithTail.head; (aux!=null);aux=aux.next){
+
+            if ( aux.key.getUser().getId() == idUser)
+            {
+                userIssues.pushBack(aux.key);
+            }
+        }
+
+        return userIssues;
+    }
+
     public Optional<IssueDTO> findByIdDTO(String idBook, Integer idUser) {
         for (Map.Entry<String, Queue<IssueDTO>> entry :  requestMap.entrySet()) {
             if(Objects.equals(idBook, entry.getKey())){
@@ -90,6 +106,7 @@ public class IssueRepository implements InterfaceRepository<Issue> {
         }
         return null;
     }
+
     @Override
     public void save(Issue newIssue) {
         issues.push(newIssue);

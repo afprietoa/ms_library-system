@@ -24,11 +24,24 @@ public class IssueController {
         return this.issueService.index();
     }
 
+
     @GetMapping("/by_id/{id}")
     public Optional<Issue> getBorrowing(@PathVariable("id") int id){
         return this.issueService.show(id);
     }
 
+
+    /*
+    @GetMapping("/reserve/by_user/{idUser}")
+    public List<IssueDTO> getIssueDTOOfUser(@PathVariable("idUser") int idUser){
+        return this.issueService.userIssueDTO(idUser);
+    }
+     */
+    @GetMapping("/borrow/by_user/{idUser}")
+    public List<Issue> getIssueOfUser(@PathVariable("idUser") int idUser)
+    {
+        return this.issueService.userIssue(idUser);
+    }
     @GetMapping("/reserve/all/book/{idBook}")
     public List<IssueDTO> getBookingHistory(@PathVariable("idBook") String idBook){
         return this.issueService.indexDTO(idBook);

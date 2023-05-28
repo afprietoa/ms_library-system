@@ -31,37 +31,33 @@ public class ListBookService {
         this.bookRepository = bookRepository;
     }
 
-    public List<Book> showListOfUser(int id_user, int list){
-
+    public List<Book> showListOfUser(int id_user, int list) {
         // get the user lists
         Optional<ListBook> listBook = listBookRepository.getListsOfUserById(id_user);
 
-        System.out.println(listBook.get().getUser().getNickname());
+        if (listBook == null)
+        {
+            return new ArrayList<>();
+        }
 
         // get the requested list
         DoublyLinkedList<Book> books = listBook.get().getUserLists()[list];
 
-        if (books == null)
-        {
+        if (books == null) {
             System.out.println("Lista Vacia");
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
-                    "The list is empty");
+            return new ArrayList<>(); // Return an empty list instead of throwing an error
         }
 
         List<Book> result = new ArrayList<>();
         DoublyLinkedList<Book>.Node<Book> aux = null;
 
-
-        for (aux = (DoublyLinkedList<Book>.Node<Book>)
-                books.head; (aux != null);
-             aux = aux.next){
-
+        for (aux = (DoublyLinkedList<Book>.Node<Book>) books.head; aux != null; aux = aux.next) {
             result.add(aux.key);
-
         }
 
         return result;
     }
+
 
     public List<Book> addInUserList(int id_user, int list, String isbn){
 

@@ -58,14 +58,15 @@ public class BookService {
         return result;
     }
 
-    public DoublyLinkedList<Book> search(String genero){
-        DoublyLinkedList<Book> results = new DoublyLinkedList<>();
+    public Optional<List<Book>> showListGenre(String genre){
+        Optional<List<Book>> result = this.bookRepository.findByGenre(genre);
 
-        return results;
-    }
+        if(result.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "The requested author does not match any author");
+        }
 
-    public void populateBooks(){
-
+        return result;
     }
 
 }

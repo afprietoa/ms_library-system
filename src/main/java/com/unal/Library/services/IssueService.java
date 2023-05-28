@@ -8,21 +8,19 @@ import com.unal.Library.models.common.ItemStatus;
 import com.unal.Library.repositories.BookRepository;
 import com.unal.Library.repositories.IssueRepository;
 import com.unal.Library.repositories.UserRepository;
+import com.unal.Library.structures.DoublyLinkedList;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class IssueService {
 
     private IssueRepository issueRepository;
     private UserRepository userRepository;
     private BookRepository bookRepository;
-
 
     public IssueService(IssueRepository issueRepository, UserRepository userRepository, BookRepository bookRepository) {
         this.issueRepository = issueRepository;
@@ -66,6 +64,29 @@ public class IssueService {
         return  resultList;
     }
 
+    public List<Issue> userIssue(int idUser)
+    {
+        // find the issues of the user
+        DoublyLinkedList<Issue> issues = this.issueRepository.findUserIssues(idUser);
+
+        // doubly -> list
+        DoublyLinkedList<Issue>.Node<Issue> aux = null;
+        List<Issue> result = new ArrayList<>();
+
+        for( aux = issues.head; (aux != null); aux = aux.next){
+
+            result.add(aux.key);
+        }
+
+        return result;
+    }
+
+    /*
+    public List<IssueDTO> userIssuDTO(int idUser)
+    {
+        // retornar la lista de IssuesDtos del usuario
+    }
+    */
     /**
      * @param idBook
      * @param idUser

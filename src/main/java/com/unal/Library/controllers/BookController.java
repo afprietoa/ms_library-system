@@ -19,8 +19,8 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("by_genre/{genre}")
-    public DoublyLinkedList<Book> getListByGenre(@PathVariable("genre") String genre){ return this.bookService.search(genre); }
+    @GetMapping("search/genre/{genre}")
+    public Optional<List<Book>> getListByGenre(@PathVariable("genre") String genre){ return this.bookService.showListGenre(genre); }
 
     @GetMapping("/all")
     public List<Book> getAllBooks(){return  this.bookService.index();}

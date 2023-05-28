@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Book {
+public class Book implements Comparable<Book> {
 
     private String isbn13;
     private String isbn10;
@@ -26,4 +26,8 @@ public class Book {
     private Integer copies;
     private String ItemStatus;
 
+    @Override
+    public int compareTo(Book o) {
+        return this.getTitle().compareTo(o.getTitle());
+    }
 }
