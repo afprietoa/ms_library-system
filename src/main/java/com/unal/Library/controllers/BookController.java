@@ -13,25 +13,73 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class BookController {
 
     @Autowired
     private BookService bookService;
 
     @GetMapping("search/genre/{genre}")
-    public Optional<List<Book>> getListByGenre(@PathVariable("genre") String genre){ return this.bookService.showListGenre(genre); }
+    public Optional<List<Book>> getListByGenre(@PathVariable("genre") String genre){
+        long startTime = System.nanoTime();
+        Optional<List<Book>> lb = this.bookService.showListGenre(genre);
+        long endTime = System.nanoTime();
+
+        long executionTime = (endTime - startTime);
+        System.out.println("Execution time: " + executionTime + " ms");
+
+        return lb;
+    }
+
 
     @GetMapping("/all")
-    public List<Book> getAllBooks(){return  this.bookService.index();}
+    public List<Book> getAllBooks(){
+
+        long startTime = System.nanoTime();
+        List<Book> lb = this.bookService.index();
+        long endTime = System.nanoTime();
+        long executionTime = (endTime - startTime);
+        System.out.println("Execution time: " + executionTime + " ms");
+
+        return lb;
+    }
+
 
     @GetMapping("search/isbn/{isbn}")
-    public Optional<Book> getBookByISBN(@PathVariable("isbn") String isbn) {return this.bookService.show(isbn);}
+    public Optional<Book> getBookByISBN(@PathVariable("isbn") String isbn) {
+
+        long startTime = System.nanoTime();
+        Optional<Book> b = this.bookService.show(isbn);
+
+        long endTime = System.nanoTime();
+        long executionTime = (endTime - startTime);
+        System.out.println("Execution time: " + executionTime + " ms");
+
+        return b;
+    }
 
     @GetMapping("search/title/{title}")
-    public Optional<List<Book>> getBookByTitle(@PathVariable("title") String title) {return this.bookService.showListTitle(title);}
+    public Optional<List<Book>> getBookByTitle(@PathVariable("title") String title) {
+
+        long startTime = System.nanoTime();
+        Optional<List<Book>> lb = this.bookService.showListTitle(title);
+        long endTime = System.nanoTime();
+        long executionTime = (endTime - startTime);
+        System.out.println("Execution time: " + executionTime + " ms");
+
+        return lb;
+    }
 
     @GetMapping("search/author/{author}")
-    public Optional<List<Book>> getBookByAuthor(@PathVariable("author") String author){return this.bookService.showListAuthor(author);}
+    public Optional<List<Book>> getBookByAuthor(@PathVariable("author") String author){
+
+        long startTime = System.nanoTime();
+        Optional<List<Book>> lb = this.bookService.showListAuthor(author);
+        long endTime = System.nanoTime();
+        long executionTime = (endTime - startTime) ;
+        System.out.println("Execution time: " + executionTime + " ms");
+
+        return lb;
+    }
 
 }

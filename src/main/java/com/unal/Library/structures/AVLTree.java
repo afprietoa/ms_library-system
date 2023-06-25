@@ -17,7 +17,7 @@ public class AVLTree<T extends Comparable<?super T>> {
     private Node root;
 
     public Node getRoot() {
-        return root;
+        return this.root;
     }
 
     public void insert(T data){
@@ -76,7 +76,7 @@ public class AVLTree<T extends Comparable<?super T>> {
     }
 
     public void deleteMax(){
-        root = deleteMin(root);
+        root = deleteMax(root);
     }
     public T min (){
         return min(root).data;

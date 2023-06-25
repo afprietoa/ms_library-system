@@ -9,6 +9,7 @@ import com.unal.Library.repositories.BookRepository;
 import com.unal.Library.repositories.IssueRepository;
 import com.unal.Library.repositories.UserRepository;
 import com.unal.Library.structures.DoublyLinkedList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,15 +19,13 @@ import java.util.*;
 @Service
 public class IssueService {
 
+    @Autowired
     private IssueRepository issueRepository;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private BookRepository bookRepository;
 
-    public IssueService(IssueRepository issueRepository, UserRepository userRepository, BookRepository bookRepository) {
-        this.issueRepository = issueRepository;
-        this.userRepository = userRepository;
-        this.bookRepository = bookRepository;
-    }
 
     /**
      *
@@ -105,9 +104,10 @@ public class IssueService {
      * @return
      */
     public Issue create(int idUser, String idBook){
+
         Issue newIssue = new Issue();
-        Optional<User> user = userRepository.findById(idUser);
-        Optional<Book> book = bookRepository.findByISBN(idBook);
+        Optional<User> user = this.userRepository.findById(idUser);
+        Optional<Book> book = this.bookRepository.findByISBN(idBook);
 
         Date borrowDate = new Date(System.currentTimeMillis());
 
@@ -124,17 +124,18 @@ public class IssueService {
         if(book.get().getCopies()!=0){
             newIssue.setBook(book.get());
             book.get().setCopies(book.get().getCopies()-1);
-            bookRepository.edit(book.get());
+            //this.bookRepository.edit(book.get(), book.get());
 
         }else{
             book.get().setItemStatus(String.valueOf(ItemStatus.UNAVAILABLE));
-            bookRepository.edit(book.get());
+            this.bookRepository.edit(book.get(), book.get());
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                     "The book does not available");
         }
 
+
         if(newIssue.getId() != null){
-            Optional<Issue> tempUser = this. issueRepository.findById(newIssue.getId());
+            Optional<Issue> tempUser = this.issueRepository.findById(newIssue.getId());
             if(tempUser.isPresent())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "ID is yet in the database.");
@@ -153,14 +154,11 @@ public class IssueService {
      */
     public IssueDTO insert(int idUser, String idBook){
 
-
-
-        Optional<Book> book = bookRepository.findByISBN(idBook);
-        Optional<User> user = userRepository.findById(idUser);
+        Optional<Book> book = this.bookRepository.findByISBN(idBook);
+        Optional<User> user = this.userRepository.findById(idUser);
 
         IssueDTO newIssue = new IssueDTO();
         if(book.get().getCopies()==0){
-
 
             Date borrowDate = new Date(System.currentTimeMillis());
 
@@ -178,7 +176,7 @@ public class IssueService {
             newIssue.setBook(book.get());
 
             book.get().setItemStatus(String.valueOf(ItemStatus.IN_RESERVE));
-            bookRepository.edit(book.get());
+            this.bookRepository.edit(book.get(), book.get());
 
 
         }else{
@@ -186,7 +184,7 @@ public class IssueService {
                     "The book does not available");
         }
         if(newIssue.getId() != null){
-            Optional<Issue> tempUser = this. issueRepository.findById(newIssue.getId());
+            Optional<Issue> tempUser = this.issueRepository.findById(newIssue.getId());
             if(tempUser.isPresent())
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "ID is yet in the database.");
@@ -218,7 +216,7 @@ public class IssueService {
                     tempIssue.get().setBorrowDate(issue.getBorrowDate());
                 if (issue.getDueDate() != null)
                     tempIssue.get().setDueDate(issue.getDueDate());
-                this.issueRepository.edit(tempIssue.get());
+                this.issueRepository.edit(issue, tempIssue.get());
                 return tempIssue.get();
             }
             else{
@@ -237,7 +235,7 @@ public class IssueService {
      * @return
      */
     public Boolean delete(String idBook){
-        Optional<Book> book = bookRepository.findByISBN(idBook);
+        Optional<Book> book = this.bookRepository.findByISBN(idBook);
         if(idBook!=null) {
             this.issueRepository.delete(idBook);
 

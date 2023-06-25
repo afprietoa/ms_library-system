@@ -17,8 +17,8 @@ import java.util.*;
 public class IssueRepository implements InterfaceRepository<Issue> {
     Stack<Issue> issues = new Stack<>();
 
-    List<Issue> issueList;
-    List<IssueDTO> reserveList;
+    List<Issue> issueList = new ArrayList<>();
+    List<IssueDTO> reserveList = new ArrayList<>();
 
     HashMap<String,Queue<IssueDTO>> requestMap = new HashMap<>();
     @Override
@@ -38,21 +38,43 @@ public class IssueRepository implements InterfaceRepository<Issue> {
     }
 
     public List<IssueDTO> toList(String idBook){
-        for (Map.Entry<String, Queue<IssueDTO>> entry :  requestMap.entrySet()) {
-            if(Objects.equals(idBook, entry.getKey())){
+
+        reserveList = new ArrayList<>();
+
+        Queue reserves = requestMap.get(idBook);
+
+        if (reserves == null) return null;
+
+        DoublyLinkedList<IssueDTO>.Node<IssueDTO> aux = null;
+
+        for( aux = reserves.listWithTail.head; (aux!=null); aux = aux.next)
+        {
+            reserveList.add(aux.key);
+        }
+
+        return reserveList;
+
+        /*
+        for (Map.Entry<String, Queue<IssueDTO>> entry :  requestMap.entrySet())
+        {
+
+            if(Objects.equals(idBook, entry.getKey()))
+            {
+
                 DoublyLinkedList<IssueDTO>.Node<IssueDTO> aux = null;
-                for(
-                        aux = entry.getValue().listWithTail.head;
-                        (aux!=null);
-                        aux=aux.next
-                ){
+
+                for( aux = entry.getValue().listWithTail.head; (aux!=null); aux = aux.next)
+                {
                     reserveList.add(aux.key);
                 }
+
                 return reserveList;
+
             }
+
         }
         return null;
-
+         */
     }
 
     public HashMap<String, Queue<IssueDTO>> mapList(DoublyLinkedList<Book> books){
@@ -93,37 +115,69 @@ public class IssueRepository implements InterfaceRepository<Issue> {
     }
 
     public Optional<IssueDTO> findByIdDTO(String idBook, Integer idUser) {
-        for (Map.Entry<String, Queue<IssueDTO>> entry :  requestMap.entrySet()) {
-            if(Objects.equals(idBook, entry.getKey())){
-                DoublyLinkedList<IssueDTO>.Node<IssueDTO> aux = null;
-                for(
-                        aux = entry.getValue().listWithTail.head;
-                        (aux!=null) && (!(aux.key.getUser().getId()==idUser));
-                        aux=aux.next
-                );
+
+        // obteniendo reservas
+        Queue reserves = requestMap.get(idBook);
+
+        DoublyLinkedList<IssueDTO>.Node<IssueDTO> aux = null;
+        for( aux = reserves.listWithTail.head; (aux!=null); aux=aux.next) {
+
+            if (aux.key.getUser().getId() == idUser) {
+
                 return Optional.of(aux.key);
+
             }
         }
+
+        /*
+        for (Map.Entry<String, Queue<IssueDTO>> entry :  requestMap.entrySet()) {
+            if(Objects.equals(idBook, entry.getKey())){
+
+                }
+            }
+        }
+         */
         return null;
     }
 
     @Override
     public void save(Issue newIssue) {
+        newIssue.setId(issues.length());
         issues.push(newIssue);
     }
 
     public void save(IssueDTO newIssue, String idBook) {
 
+        Queue reserves = requestMap.get(idBook);
+
+        // si no esta el libro
+        if (reserves == null){
+            System.out.println("Primera vez");
+            Queue newQueue = new Queue();
+            newQueue.enqueue(newIssue);
+            newIssue.setPlaceInQueue(0);
+
+            requestMap.put(idBook, newQueue);
+        } else {
+            // si el libro ya tiene reserva
+            System.out.println("Las demas veces");
+            newIssue.setPlaceInQueue(reserves.length());
+            reserves.enqueue(newIssue);
+            requestMap.put(idBook, reserves);
+        }
+
+        /*
         for (Map.Entry<String, Queue<IssueDTO>> entry :  requestMap.entrySet()) {
             if(Objects.equals(idBook, entry.getKey())){
                 newIssue.setPlaceInQueue(entry.getValue().length());
                 entry.getValue().enqueue(newIssue);
             }
         }
+         */
     }
 
     @Override
-    public void edit(Issue issue) {
+    public void edit(Issue issue, Issue newIssue) {
         issues.listWithTail.search(issue).key = issue;
     }
 

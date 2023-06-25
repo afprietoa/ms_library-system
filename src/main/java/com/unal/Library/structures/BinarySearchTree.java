@@ -1,7 +1,13 @@
 package com.unal.Library.structures;
 
+import com.unal.Library.models.Book;
+
 public class BinarySearchTree<T extends Comparable<?super T>> {
-    class BinaryNode<T> {
+    public BinaryNode<T> getRoot() {
+        return this.root;
+    }
+
+    public class BinaryNode<T> {
         private BinaryNode<T> left;
         private T element;
         private BinaryNode<T> right;
@@ -18,6 +24,8 @@ public class BinarySearchTree<T extends Comparable<?super T>> {
     }
 
     private BinaryNode<T> root;
+
+
 
     public BinarySearchTree(){
         this.root = null;

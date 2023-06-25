@@ -11,6 +11,9 @@ public class DoublyLinkedList<T> {
             this.prev = null;
         }
 
+        public void setData(T t) {
+            this.key = t;
+        }
     }
     public Node<T> head;
     private Node<T> tail;

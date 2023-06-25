@@ -9,6 +9,7 @@ import com.unal.Library.repositories.IssueRepository;
 import com.unal.Library.repositories.ListBookRepository;
 import com.unal.Library.repositories.UserRepository;
 import com.unal.Library.structures.DoublyLinkedList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,9 +21,13 @@ import java.util.Optional;
 @Service
 public class ListBookService {
 
+    @Autowired
     private IssueRepository issueRepository;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private BookRepository bookRepository;
+    @Autowired
     private ListBookRepository listBookRepository;
 
     public ListBookService(ListBookRepository listBookRepository, UserRepository userRepository, BookRepository bookRepository) {
