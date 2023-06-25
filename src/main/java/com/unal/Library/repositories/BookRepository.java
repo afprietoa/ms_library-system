@@ -379,6 +379,10 @@ public class BookRepository implements InterfaceRepository<Book>{
     public void delete(int id) {
     }
 
+    public void erase(String isbn){
+      books.remove(isbn);
+    }
+
     // for the doubly
     /*
     public List<Book> toList(){

@@ -1,9 +1,11 @@
 package com.unal.Library.controllers;
 
 import com.unal.Library.models.Book;
+import com.unal.Library.models.User;
 import com.unal.Library.services.BookService;
 import com.unal.Library.structures.DoublyLinkedList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -54,7 +56,6 @@ public class BookController {
         long endTime = System.nanoTime();
         long executionTime = (endTime - startTime);
         System.out.println("Execution time: " + executionTime + " ms");
-
         return b;
     }
 
@@ -82,4 +83,22 @@ public class BookController {
         return lb;
     }
 
+
+    @PostMapping("/insert")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Book insertBook(@RequestBody Book book){
+        return this.bookService.create(book);
+    }
+
+    @DeleteMapping("/delete/{isbn}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Boolean deleteBook(@PathVariable("isbn") String isbn){
+        return this.bookService.delete(isbn);
+    }
+
+    @PutMapping("/update/{isbn}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Book updateBook(@PathVariable("isbn") String isbn, @RequestBody Book book){
+        return this.bookService.update(isbn, book);
+    }
 }

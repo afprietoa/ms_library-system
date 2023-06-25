@@ -1,6 +1,7 @@
 package com.unal.Library.services;
 
 import com.unal.Library.models.Book;
+import com.unal.Library.models.User;
 import com.unal.Library.repositories.BookRepository;
 import com.unal.Library.structures.DoublyLinkedList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,4 +70,49 @@ public class BookService {
         return result;
     }
 
+    public Book create(Book newBook){
+        /*
+        System.out.println(newBook.getIsbn13());
+        if(newBook.getIsbn13() != null){
+            Optional<Book> tempBook = this.bookRepository.findByISBN(newBook.getIsbn13());
+            if(tempBook != null && tempBook.isPresent()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "ISBN is yet in the database.");
+            }
+        }
+         */
+        if((newBook.getCategories() != null) && (newBook.getAuthors() != null) &&
+                (newBook.getCopies() != null)){
+            this.bookRepository.save(newBook);
+            return newBook;
+        }else
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Mandatory fields had not been provided.");
+    }
+
+    public Boolean delete(String isbn){
+        if (isbn.length() == 13){
+            this.bookRepository.erase(isbn);
+            return true;
+        }
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "User cannot be deleted.");
+    }
+
+    public Book update(String isbn, Book book){
+        if(isbn.length() == 13) {
+            Optional<Book> tempBook = this.bookRepository.findByISBN(isbn);
+            if (tempBook.isPresent()) {
+                this.bookRepository.edit(book, book);
+                return book;
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "User.id does not exist in database.");
+            }
+
+        }else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                "User.id cannot be negative.");
+        }
+    }
 }

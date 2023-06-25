@@ -31,9 +31,13 @@ public class RecommendationsService {
 
     public List<Book> generateRecommendations(int idUser){
 
-        DoublyLinkedList readBooks = listBookRepository.getListsOfUserById(idUser).get().getUserLists()[1];
+        Optional<ListBook> response = listBookRepository.getListsOfUserById(idUser);
 
-        if (readBooks.empty()) return new ArrayList<>();
+        if (response == null) return new ArrayList<>();
+
+        DoublyLinkedList readBooks = response.get().getUserLists()[1];
+
+        if (readBooks == null || readBooks.empty()) return new ArrayList<>();
 
         // Agregar libros al sistema de recomendaciones
         for (Book book : bookRepository.findAll()) {
