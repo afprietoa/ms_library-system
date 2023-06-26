@@ -128,12 +128,24 @@ public class UserService {
         if(id > 0){
             Optional<User> tempUser = this.userRepository.findById(id);
             if(tempUser.isPresent()){
+                if(user.getName() != null){
+
+                    tempUser.get().setName(user.getName());
+                }
                 if(user.getNickname() != null){
 
                     tempUser.get().setNickname(user.getNickname());
                 }
+                if(user.getEmail() != null){
+
+                    tempUser.get().setEmail(user.getEmail());
+                }
                 if (user.getPassword() != null){
                     tempUser.get().setPassword(userRepository.convertToSHA256(user.getPassword()));
+                }
+                if(user.getRole() != null){
+
+                    tempUser.get().setRole(user.getRole());
                 }
                 this.userRepository.edit(tempUser.get(), tempUser.get());
                 return tempUser.get();

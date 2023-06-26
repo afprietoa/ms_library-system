@@ -43,7 +43,7 @@ public class UserController {
         return this.userService.show(id);
     }
 
-    @PostMapping("/insert")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public User insertUser(@RequestBody User user){
         return this.userService.create(user);
