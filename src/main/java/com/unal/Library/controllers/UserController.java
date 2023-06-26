@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -18,7 +19,23 @@ public class UserController {
 
     @GetMapping("/all")
     public List<User> getAllUsers(){
-        return this.userService.index();
+
+        List<User> users = this.userService.index().stream()
+                .limit(10)
+                .collect(Collectors.toList());
+        return users;
+    }
+
+    @PutMapping("/edit/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User editUser(@PathVariable("id") int id, @RequestBody User user){
+        return this.userService.edit(id, user);
+    }
+
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User updateUser(@RequestBody User user){
+        return this.userService.update(user);
     }
 
     @GetMapping("/by_id/{id}")

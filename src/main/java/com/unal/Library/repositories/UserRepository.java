@@ -57,6 +57,7 @@ public class UserRepository implements InterfaceRepository<User> {
 
     @Override
     public void edit(User user, User NewUser) {
+        System.out.println(NewUser.getName());
         users.search(user).key = NewUser;
     }
     public Optional<User> validateLogin(String email, String password){
@@ -109,12 +110,11 @@ public class UserRepository implements InterfaceRepository<User> {
             while((tuple = buffer.readLine()) != null){
                 String[] cellValues = tuple.split(",");
                 User user = new User(
-                        Integer.parseInt(cellValues[0]),
-                                cellValues[1].concat(" ").concat(cellValues[2]),
-                                cellValues[3],
-                                cellValues[4],
-                                this.convertToSHA256(cellValues[3]),
-                        String.valueOf(Arrays.asList(Role.values()).get((int)(Math.floor(Math.random()*Role.values().length))))
+                        cellValues[1].concat(" ").concat(cellValues[2]),
+                        cellValues[3],
+                        cellValues[4],
+                        this.convertToSHA256(cellValues[3]),
+                        String.valueOf(Arrays.asList(Role.values()).get((int)(Math.floor(Math.random()*Role.values().length)))).toLowerCase()
                 );
                 users.pushBack(user);
             }

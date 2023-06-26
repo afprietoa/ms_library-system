@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.List;
-
-
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/book")
@@ -22,28 +21,20 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("search/genre/{genre}")
-    public Optional<List<Book>> getListByGenre(@PathVariable("genre") String genre){
-        long startTime = System.nanoTime();
-        Optional<List<Book>> lb = this.bookService.showListGenre(genre);
-        long endTime = System.nanoTime();
-
-        long executionTime = (endTime - startTime);
-        System.out.println("Execution time: " + executionTime + " ms");
-
-        return lb;
+    public List<Book> getListByGenre(@PathVariable("genre") String genre){
+        List<Book> books = this.bookService.showListGenre(genre).get().stream()
+                .limit(10)
+                .collect(Collectors.toList());
+        return books;
     }
-
 
     @GetMapping("/all")
     public List<Book> getAllBooks(){
 
-        long startTime = System.nanoTime();
-        List<Book> lb = this.bookService.index();
-        long endTime = System.nanoTime();
-        long executionTime = (endTime - startTime);
-        System.out.println("Execution time: " + executionTime + " ms");
-
-        return lb;
+        List<Book> books = this.bookService.index().stream()
+                .limit(10)
+                .collect(Collectors.toList());
+        return books;
     }
 
 
@@ -60,27 +51,19 @@ public class BookController {
     }
 
     @GetMapping("search/title/{title}")
-    public Optional<List<Book>> getBookByTitle(@PathVariable("title") String title) {
-
-        long startTime = System.nanoTime();
-        Optional<List<Book>> lb = this.bookService.showListTitle(title);
-        long endTime = System.nanoTime();
-        long executionTime = (endTime - startTime);
-        System.out.println("Execution time: " + executionTime + " ms");
-
-        return lb;
+    public List<Book> getBookByTitle(@PathVariable("title") String title) {
+        List<Book> books = this.bookService.showListTitle(title).get().stream()
+                .limit(10)
+                .collect(Collectors.toList());
+        return books;
     }
 
     @GetMapping("search/author/{author}")
-    public Optional<List<Book>> getBookByAuthor(@PathVariable("author") String author){
-
-        long startTime = System.nanoTime();
-        Optional<List<Book>> lb = this.bookService.showListAuthor(author);
-        long endTime = System.nanoTime();
-        long executionTime = (endTime - startTime) ;
-        System.out.println("Execution time: " + executionTime + " ms");
-
-        return lb;
+    public List<Book> getBookByAuthor(@PathVariable("author") String author){
+        List<Book> books = this.bookService.showListAuthor(author).get().stream()
+                .limit(10)
+                .collect(Collectors.toList());
+        return books;
     }
 
 

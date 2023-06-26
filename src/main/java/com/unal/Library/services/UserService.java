@@ -124,6 +124,50 @@ public class UserService {
     }
 
 
+    public  User edit(int id, User user){
+        if(id > 0){
+            Optional<User> tempUser = this.userRepository.findById(id);
+            if(tempUser.isPresent()){
+                if(user.getNickname() != null){
+
+                    tempUser.get().setNickname(user.getNickname());
+                }
+                if (user.getPassword() != null){
+                    tempUser.get().setPassword(userRepository.convertToSHA256(user.getPassword()));
+                }
+                this.userRepository.edit(tempUser.get(), tempUser.get());
+                return tempUser.get();
+            }
+            else{
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "User.id does not exist in database.");
+            }
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "User.id cannot be negative.");
+        }
+    }
+
+    public  User update(User user){
+        if(user.getId() > 0){
+            Optional<User> tempUser = this.userRepository.findById(user.getId());
+            if(tempUser.isPresent()){
+                if(user.getNickname() != null)
+                    tempUser.get().setNickname(user.getNickname());
+                if (user.getPassword() != null)
+                    tempUser.get().setPassword(userRepository.convertToSHA256(user.getPassword()));
+                this.userRepository.edit(tempUser.get(), user);
+                return user;
+            }
+            else{
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "User.id does not exist in database.");
+            }
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "User.id cannot be negative.");
+        }
+    }
 
 
 }
