@@ -51,6 +51,7 @@ public class UserService {
                         "ID is yet in the database.");
             }
         }
+        newUser.setId();
         if((newUser.getEmail() != null) && (newUser.getNickname() != null) &&
                 (newUser.getPassword() != null)){
             newUser.setPassword(userRepository.convertToSHA256(newUser.getPassword()));

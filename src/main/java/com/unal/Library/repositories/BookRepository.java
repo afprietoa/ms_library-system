@@ -417,7 +417,7 @@ public class BookRepository implements InterfaceRepository<Book>{
                             cellValues[8],
                             cellValues[9],
                             MIN_VALUE+random.nextInt((MAX_VALUE+1)-MIN_VALUE),
-                            String.valueOf(ItemStatus.AVAILABLE)
+                            String.valueOf(ItemStatus.AVAILABLE).toLowerCase()
                     );
                     books.put(book.getIsbn13(), book);
                 }
